@@ -1,0 +1,7 @@
+ManyTags
+========
+
+Requirements
+------------
+* PHP
+* MySQL
