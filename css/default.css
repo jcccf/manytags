@@ -21,7 +21,8 @@ h1 {
 
 #instructions {
   font-size: larger;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
+  height: 65px;
 }
 
 #back_button {

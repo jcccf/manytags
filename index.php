@@ -15,6 +15,7 @@ require_once("inc/core.php");
   <script>
   
   var imageData = null;
+  var tagData = new Array(30);
   var p = 0;
   	
   $(document).ready(function(){
@@ -29,35 +30,73 @@ require_once("inc/core.php");
     
     $("#back_button").click(function(){
       if(p != 0){
+        saveTagData();
         p--;
         updatePage();
       }
     });
+    
     $("#forward_button").click(function(){
       if(p != 29){
+        saveTagData();
         p++;
         updatePage();
       }
       //TODO if at the end go to the survey
     });
+    
   });
   
+  // Preload all images
   function loadedImageData(){
     var tmpImg = new Image();
-    //alert(imageData);
     $.each(imageData, function(k,v){
-      //alert(v.image_id);
-      tmpImg.src = v.url; // Preload all images
+      tmpImg.src = v.url; 
     });
   }
   
+  // Save tag data locally and to server
+  function saveTagData(){
+    if (tagData[p] != $("#content_input_textarea").val()){ // Update only if text got changed
+      tagData[p] = $("#content_input_textarea").val();
+      
+      // Post data to server
+      $.post("set_tags.php", 
+        { type_id : imageData[p].type_id, image_id : imageData[p].image_id, tag_data : tagData[p] },
+        function(data){
+          if(data.length > 0){
+            alert("Errors Occurred!");
+          }
+      },"json");
+    }
+  }
+  
+  function restoreTagData(){
+    $("#content_input_textarea").val(tagData[p]);
+  }
+  
+  // Update page state to reflect any changes
   function updatePage(){
+    restoreTagData();
     $("#content_image_img").attr("src", imageData[p].url);
     $("#progressbar").progressbar({
-			value: p * 3
+			value: (p+1) * 3.3
 		});
-		// TODO Set textbox text
-		// TODO Save data to database
+    switch(imageData[p].type_id){
+      case "1":
+        $("#instructions").html("Type <strong>single-word</strong> tags below, with one tag on each line.");
+        break;
+      case "2":
+        $("#instructions").html("Type tags consisting of <strong>more than one word</strong> below. Separate your tags by line.");
+        break;
+      case "3":
+        $("#instructions").html("<strong>Comment</strong> on the image using the text box below.");
+        break;
+      default:
+        alert("An error occurred. Please let us know about how this occurred!");
+        break;
+    }
+		$("#debug").html("Image ID is "+imageData[p].image_id+", Type_ID is "+imageData[p].type_id+", URL is "+imageData[p].url);
   }
   </script>
 </head>
@@ -87,7 +126,7 @@ require_once("inc/core.php");
     </div>
     
     <form>
-    <textarea spellcheck="false"></textarea>  
+    <textarea spellcheck="false" id="content_input_textarea"></textarea>  
     </form>
     
     <div id="controls_back" class="grid_1 alpha">
@@ -102,10 +141,11 @@ require_once("inc/core.php");
 
   </div>
   
-  <footer>
+  <footer class="container_12">
     <?php
     echo "User ID is {$_SESSION['user_id']}<br />";
     ?>
+    <div id="debug"></div>
   </foooter>
 </body>
 
