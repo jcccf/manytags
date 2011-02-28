@@ -26,18 +26,20 @@ h1 {
 }
 
 #back_button {
+  background-color: white;
   text-align: center;
   font-size: larger;
   border: 1px solid black;
-  width: 50px;
+  width: 70px;
   padding: 10px;  
 }
 
 #forward_button {
+  background-color: white;
   text-align: center;
   font-size: larger;
   border: 1px solid black;
-  width: 200px;
+  width: 220px;
   padding: 10px;
 }
 
@@ -54,6 +56,11 @@ textarea {
   width: 296px;
   height: 300px;
   font-size: 14px;
+}
+
+#theend {
+  display: none;
+  font-size: x-large;
 }
 
 /*

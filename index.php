@@ -12,13 +12,26 @@ require_once("inc/core.php");
   <link rel="stylesheet" href="css/default.css" />
   <script src="js/jquery-1.5.min.js"></script>
   <script src="js/jquery-ui-1.8.9.custom.min.js"></script>
+  <script src="js/json2.js"></script>
+  <script src="js/history.adapter.jquery.js"></script>
+  <script src="js/history.js"></script>
+  <script src="js/history.html4.js"></script>
   <script>
   
   var imageData = null;
-  var tagData = new Array(30);
   var p = 0;
+  var History = window.History;
+  	
+  $(window).bind('statechange',function(){
+    var state = History.getState();
+    if (state.data.page != null){
+      p = state.data.page;
+    }
+    updatePage();
+  });
   	
   $(document).ready(function(){
+      
     $("#progressbar").progressbar({
 			value: 0
 		});
@@ -33,6 +46,10 @@ require_once("inc/core.php");
         saveTagData();
         p--;
         updatePage();
+        History.pushState({page: p}, "Many Tags Page "+p, "?page="+p);
+      }
+      else{
+        saveTagData();
       }
     });
     
@@ -41,6 +58,13 @@ require_once("inc/core.php");
         saveTagData();
         p++;
         updatePage();
+        History.pushState({page: p}, "Many Tags Page "+p, "?page="+p);
+      }
+      else{
+        saveTagData();
+        $("#content_input").hide();
+        $("#content_image").hide();
+        $("#theend").show();
       }
       //TODO if at the end go to the survey
     });
@@ -57,13 +81,20 @@ require_once("inc/core.php");
   
   // Save tag data locally and to server
   function saveTagData(){
-    if (tagData[p] != $("#content_input_textarea").val()){ // Update only if text got changed
-      tagData[p] = $("#content_input_textarea").val();
+    if (imageData[p].data != $("#content_input_textarea").val()){ // Update only if text got changed
+      imageData[p].data = $("#content_input_textarea").val();
+      
+      // TODO Disable Back/Save Buttons
+      $("#forward_button").attr("disabled", true);
+      $("#back_button").attr("disabled", true);
       
       // Post data to server
       $.post("set_tags.php", 
-        { type_id : imageData[p].type_id, image_id : imageData[p].image_id, tag_data : tagData[p] },
+        { type_id : imageData[p].type_id, image_id : imageData[p].image_id, tag_data : imageData[p].data },
         function(data){
+          $("#forward_button").removeAttr("disabled");
+          $("#back_button").removeAttr("disabled");
+          
           if(data.length > 0){
             alert("Errors Occurred!");
           }
@@ -72,7 +103,7 @@ require_once("inc/core.php");
   }
   
   function restoreTagData(){
-    $("#content_input_textarea").val(tagData[p]);
+    $("#content_input_textarea").val(imageData[p].data);
   }
   
   // Update page state to reflect any changes
@@ -110,9 +141,9 @@ require_once("inc/core.php");
     </div>
   </header>
 
-  <div id="content" class="container_12">
+  <div id="divider" class="container_12">
     <hr />
-    </div>
+  </div>
   
   <div id="content" class="container_12">
     
@@ -127,16 +158,23 @@ require_once("inc/core.php");
     
     <form>
     <textarea spellcheck="false" id="content_input_textarea"></textarea>  
-    </form>
+    
     
     <div id="controls_back" class="grid_1 alpha">
-      <div id="back_button">Back</div>
+      <input type="button" value="Back" id="back_button" />
     </div>
 
     <div id="controls_forward" class="grid_3 omega">
-      <div id="forward_button">Save and <b>Continue</b></div>
+      <input type="button" value="Save and Continue" id="forward_button" />
     </div>
     
+    </form>
+    
+  </div>
+  
+  <div id="theend" class="grid_12">
+    Thank you for completing the first part of this study.<br />
+    Please visit <a href=\"\">this link</a> to continue with the survey.
   </div>
 
   </div>
