@@ -44,7 +44,7 @@ require_once("inc/core.php");
     
     <div class="grid_6">
       Email Address<br />
-      <input type="text" value="@cornell.edu" size="30" name="email" id="reg_form_email" />
+      <input type="email" value="@cornell.edu" size="30" name="email" id="reg_form_email" />
     </div>
     
     <div class="grid_6">

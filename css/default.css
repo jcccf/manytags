@@ -6,6 +6,11 @@ body {
   padding: 0;
 }
 
+* {
+  margin: 0;
+  padding: 0;
+}
+
 hr {
   margin-bottom: 20px;
   border: 1px solid transparent;
@@ -13,6 +18,10 @@ hr {
 
 h1 {
   margin: 20px 0;
+}
+
+h3 {
+  margin-bottom: 5px;
 }
 
 #content_image img {
@@ -61,6 +70,51 @@ textarea {
 #theend {
   display: none;
   font-size: x-large;
+}
+
+ul {
+  list-style-type: disc;
+}
+
+ul li{
+  display: inline;
+}
+
+span.tag_wrapper {
+  margin-right: 0;
+  padding-right: 10px;
+  margin-right: 8px;
+  background: transparent url(../img/dot.gif) no-repeat 100% 50%;
+}
+
+ul.comments li{
+  display: block;
+  border-bottom: 1px dashed gray;
+  padding: 5px 0;
+}
+
+.question{
+  background-color: #EFEFEF;
+  margin: 15px 0;
+  padding: 5px;
+}
+
+.question_title{
+  padding: 5px 0;
+  font-size: larger;
+}
+
+ul.radiolist{
+  padding-left: 5px;
+}
+
+ul.radiolist li{
+  padding-right: 25px;
+  line-height: 30px;
+}
+
+ul.radiolist li label{
+  padding-left: 5px;
 }
 
 /*

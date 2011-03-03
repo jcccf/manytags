@@ -16,6 +16,7 @@ require_once("inc/core.php");
   <script src="js/history.adapter.jquery.js"></script>
   <script src="js/history.js"></script>
   <script src="js/history.html4.js"></script>
+  <script src="js/jquery.hotkeys.js"></script>
   <script>
   
   var imageData = null;
@@ -66,8 +67,10 @@ require_once("inc/core.php");
         $("#content_image").hide();
         $("#theend").show();
       }
-      //TODO if at the end go to the survey
     });
+    
+    $(document).bind('keydown', 'p', function(){$("#back_button").click();});
+		$(document).bind('keydown', 'n', function(){$("#forward_button").click();});
     
   });
   
@@ -157,7 +160,7 @@ require_once("inc/core.php");
     </div>
     
     <form>
-    <textarea spellcheck="false" id="content_input_textarea"></textarea>  
+    <textarea spellcheck="false" id="content_input_textarea" autofocus></textarea>  
     
     
     <div id="controls_back" class="grid_1 alpha">
