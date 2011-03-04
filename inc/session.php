@@ -9,9 +9,9 @@ if (!isset($_SESSION['user_id']) && $_SERVER['SCRIPT_NAME'] != "/register.php") 
 
 // Register a new user
 if ($_SERVER['SCRIPT_NAME'] == "/register.php") {
-  if (isset($_POST['email']) && isset($_POST['humantest'])){
+  if (isset($_POST['email']) && isset($_POST['humantest']) && isset($_POST['flname'])){
     if (trim($_POST['humantest']) == "7" || trim($_POST['humantest'] == "seven")) {
-      $_SESSION['user_id'] = db_initialize_user($_POST['email']);
+      $_SESSION['user_id'] = db_initialize_user($_POST['flname'], $_POST['email']);
       header("Location: index.php");
     }
   }

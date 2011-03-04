@@ -12,12 +12,13 @@ if (!$db_selected) {
 
 // Helper Functions
 
-function db_initialize_user($email){
+function db_initialize_user($name, $email){
   
   $email = mysql_real_escape_string($email);
+  $name = mysql_real_escape_string($name);
   
   // Create user and get back userid
-  mysql_query("INSERT INTO users (email) VALUES('{$email}')");
+  mysql_query("INSERT INTO users (name, email) VALUES('$name','$email')");
   echo mysql_error();
   $user_id = mysql_insert_id();
   
