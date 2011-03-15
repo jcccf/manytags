@@ -2,6 +2,12 @@
 
 require_once("inc/core.php");
 
+$user_id = mysql_real_escape_string($_SESSION['user_id']);
+// Get Completion
+$q = mysql_query("SELECT completed FROM users WHERE id = '$user_id'");
+$r = mysql_fetch_array($q);
+$completed = ($r[0] == "1") ? "true" : "false";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,6 +27,7 @@ require_once("inc/core.php");
   
   var imageData = null;
   var p = 0;
+  var completed = <?php echo $completed ?>;
   var History = window.History;
   	
   $(window).bind('statechange',function(){
@@ -32,6 +39,19 @@ require_once("inc/core.php");
   });
   	
   $(document).ready(function(){
+    
+    if(completed) endOfStudy();
+    
+    $( "#dialog-message" ).dialog({
+      modal: true,
+      width: 960,
+      minWidth: 960,
+      buttons: {
+      	Ok: function() {
+      		$( this ).dialog( "close" );
+      	}
+      }
+    });
       
     $("#progressbar").progressbar({
 			value: 0
@@ -43,6 +63,7 @@ require_once("inc/core.php");
     });
     
     $("#back_button").click(function(){
+      if(completed) return false;
       if(p != 0){
         saveTagData();
         p--;
@@ -55,6 +76,7 @@ require_once("inc/core.php");
     });
     
     $("#forward_button").click(function(){
+      if(completed) return false;
       if(p != 29){
         saveTagData();
         p++;
@@ -62,10 +84,9 @@ require_once("inc/core.php");
         History.pushState({page: p}, "Many Tags Page "+p, "?page="+p);
       }
       else{
+        completed = true;
         saveTagData();
-        $("#content_input").hide();
-        $("#content_image").hide();
-        $("#theend").show();
+        endOfStudy();
       }
     });
     
@@ -111,6 +132,7 @@ require_once("inc/core.php");
   
   // Update page state to reflect any changes
   function updatePage(){
+    if(completed) return false;
     restoreTagData();
     $("#content_image_img").attr("src", imageData[p].url);
     $("#progressbar").progressbar({
@@ -132,6 +154,17 @@ require_once("inc/core.php");
     }
 		$("#debug").html("Image ID is "+imageData[p].image_id+", Type_ID is "+imageData[p].type_id+", URL is "+imageData[p].url);
   }
+  
+  function endOfStudy(){
+    $("#content_input").hide();
+    $("#content_image").hide();
+    $("#theend_pre").show();
+    $.post("set_options.php", {completed: 1}, function(){
+      $("#theend_pre").hide();
+      $("#theend").show();
+    });
+  }
+  
   </script>
 </head>
 
@@ -175,16 +208,29 @@ require_once("inc/core.php");
     
   </div>
   
+  <!-- End of Study Instructions -->
+  <div id="theend_pre" style="display: none" class="grid_12">
+  Please wait...  
+  </div>
   <div id="theend" class="grid_12">
     Thank you for completing the first part of this study.<br />
-    Please visit <a href=\"\">this link</a> to continue with the survey.
+    Please visit <b><a href=\"\">this link</a></b> to continue with the survey.
   </div>
 
   </div>
   
+  <!-- Instructions -->
+  <div id="dialog-message" title="Instructions">
+  		You will be asked to tag images in three different ways - using single word tags, using multiple word tags, or using a comment.
+  		<br /><br />
+  	  <b>Examples of single word tags:</b> "<i>hello</i>" or "<i>maple</i>"<br /><br />
+  	  <b>Examples of multiple word tags:</b> "<i>optimus prime</i>" or "<i>around_the_flask</i>"<br /><br />
+  	  <b>Example of a comment:</b> "<i>This is a comment and it can be as long or as short as I want.</i>"
+  </div>
+  
   <footer class="container_12">
     <?php
-    echo "User ID is {$_SESSION['user_id']}<br />";
+    echo "User ID is $user_id<br />";
     ?>
     <div id="debug"></div>
   </foooter>
