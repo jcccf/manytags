@@ -11,6 +11,10 @@ body {
   padding: 0;
 }
 
+a {
+  text-decoration: none;
+}
+
 hr {
   margin-bottom: 20px;
   border: 1px solid transparent;

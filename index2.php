@@ -2,6 +2,12 @@
 
 require_once("inc/core.php");
 
+$user_id = mysql_real_escape_string($_SESSION['user_id']);
+// Get Completion
+$q = mysql_query("SELECT completed FROM users WHERE id = '$user_id'");
+$r = mysql_fetch_array($q);
+$completed = ($r[0] == "1") ? "true" : "false";
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -21,6 +27,7 @@ require_once("inc/core.php");
   
   var imageData = null;
   var p = 0;
+  var completed = <?php echo $completed ?>;
   var History = window.History;
   	
   $(window).bind('statechange',function(){
@@ -32,6 +39,8 @@ require_once("inc/core.php");
   });
   	
   $(document).ready(function(){
+    
+    if(completed) endOfStudy();
       
     $("#progressbar").progressbar({
 			value: 0
@@ -47,6 +56,7 @@ require_once("inc/core.php");
 		$(document).bind('keydown', 'n', function(){$("#forward_button").click();});
 		
 		$("#back_button").click(function(){
+		  if(completed) return false;
       if(p != 0){
         saveTagData();
         p--;
@@ -60,6 +70,7 @@ require_once("inc/core.php");
     });
     
     $("#forward_button").click(function(){
+      if(completed) return false;
       if(p != 29){
         saveTagData();
         p++;
@@ -68,10 +79,7 @@ require_once("inc/core.php");
       }
       else{
         saveTagData();
-        $("#content_input").hide();
-        $("#content_image").hide();
-        $("#content_ratings").hide();
-        $("#theend").show();
+        endOfStudy();
       }
     });
     
@@ -149,6 +157,18 @@ require_once("inc/core.php");
     }
     $("#debug").html("Image ID is "+imageData[p].image_id+", Type_ID is "+imageData[p].type_id+", URL is "+imageData[p].url);
   }
+  
+  function endOfStudy(){
+    completed = true;
+    $("#content_input").hide();
+    $("#content_image").hide();
+    $("#content_ratings").hide();
+    $("#theend_pre").show();
+    $.post("set_options.php", {completed: 1}, function(){
+      $("#theend_pre").hide();
+      $("#theend").show();
+    });
+  }
 
   </script>
 </head>
@@ -214,6 +234,9 @@ require_once("inc/core.php");
 
   </form>  
   
+  <div id="theend_pre" style="display: none" class="grid_12">
+  Please wait...  
+  </div>
   <div id="theend" class="grid_12">
     Thank you for completing the first part of this study.<br />
     Please visit <a href=\"\">this link</a> to continue with the survey.

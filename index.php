@@ -52,6 +52,10 @@ $completed = ($r[0] == "1") ? "true" : "false";
       	}
       }
     });
+    
+      $("#dialogagain").click(function(){
+        $( "#dialog-message" ).dialog("open");
+      });
       
     $("#progressbar").progressbar({
 			value: 0
@@ -84,7 +88,6 @@ $completed = ($r[0] == "1") ? "true" : "false";
         History.pushState({page: p}, "Many Tags Page "+p, "?page="+p);
       }
       else{
-        completed = true;
         saveTagData();
         endOfStudy();
       }
@@ -156,6 +159,7 @@ $completed = ($r[0] == "1") ? "true" : "false";
   }
   
   function endOfStudy(){
+    completed = true;
     $("#content_input").hide();
     $("#content_image").hide();
     $("#theend_pre").show();
@@ -188,10 +192,9 @@ $completed = ($r[0] == "1") ? "true" : "false";
   </div>
 
   <div id="content_input" class="grid_4">
-    <div id="instructions">
-    Type <strong>single-word</strong> tags below. Separate your tags by line.
+    <div>
+    <span id="instructions">Type <strong>single-word</strong> tags below. Separate your tags by line.</span>&nbsp;<a id="dialogagain" href="#">[?]</a>
     </div>
-    
     <form>
     <textarea spellcheck="false" id="content_input_textarea" autofocus></textarea>  
     
@@ -221,10 +224,10 @@ $completed = ($r[0] == "1") ? "true" : "false";
   
   <!-- Instructions -->
   <div id="dialog-message" title="Instructions">
-  		You will be asked to tag images in three different ways - using single word tags, using multiple word tags, or using a comment.
+  		You will be asked to tag images in three different ways - using tags made up of a single word, using tags made up of more than one word, or using a comment.
   		<br /><br />
-  	  <b>Examples of single word tags:</b> "<i>hello</i>" or "<i>maple</i>"<br /><br />
-  	  <b>Examples of multiple word tags:</b> "<i>optimus prime</i>" or "<i>around_the_flask</i>"<br /><br />
+  	  <b>Examples of tags with a single word:</b> "<i>hello</i>" or "<i>maple</i>"<br /><br />
+  	  <b>Examples of tags with more than one word:</b> "<i>optimus prime</i>" or "<i>around_the_flask</i>"<br /><br />
   	  <b>Example of a comment:</b> "<i>This is a comment and it can be as long or as short as I want.</i>"
   </div>
   
