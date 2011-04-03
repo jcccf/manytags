@@ -43,9 +43,7 @@ $completed = ($r[0] == "1") ? "true" : "false";
     if(completed) endOfStudy();
     
     $( "#dialog-message" ).dialog({
-      modal: true,
-      width: 960,
-      minWidth: 960,
+      modal: true, width: 960, minWidth: 960,
       buttons: {
       	Ok: function() {
       		$( this ).dialog( "close" );
@@ -53,9 +51,23 @@ $completed = ($r[0] == "1") ? "true" : "false";
       }
     });
     
-      $("#dialogagain").click(function(){
-        $( "#dialog-message" ).dialog("open");
-      });
+    $("#dialog-message-swt").dialog({ modal: true, autoOpen: false, width: 640, minWidth: 640, 
+      buttons: { Ok: function() { $( this ).dialog( "close" ); } } });
+    $("#dialog-message-mwt").dialog({ modal: true, autoOpen: false, width: 640, minWidth: 640,
+      buttons: { Ok: function() { $( this ).dialog( "close" ); } } });
+    $("#dialog-message-com").dialog({ modal: true, autoOpen: false, width: 640, minWidth: 640,
+      buttons: { Ok: function() { $( this ).dialog( "close" ); } } });
+    
+    $("#dialogagain").click(function(){
+      switch(imageData[p].type_id){
+        case "1":
+          $("#dialog-message-swt").dialog("open"); break;
+        case "2":
+          $("#dialog-message-mwt").dialog("open"); break;
+        default:
+          $("#dialog-message-com").dialog("open"); break;
+      }
+    });
       
     $("#progressbar").progressbar({
 			value: 0
@@ -217,21 +229,51 @@ $completed = ($r[0] == "1") ? "true" : "false";
   </div>
   <div id="theend" class="grid_12">
     Thank you for completing the first part of this study.<br />
-    Please visit <b><a href=\"\">this link</a></b> to continue with the survey.
+    Please visit <b><a href=\"https://cornell.qualtrics.com/SE/?SID=SV_6QiBUho6nQQfZAw\">this link</a></b> to continue with the survey.
+    
+    <br /><br />
+    <div style="font-size: x-small;">
+    <h2>Photo Credits</h2>
+    <?php
+    $ack = mysql_query("SELECT url,credit, credit_url FROM images");
+    while($ack2 = mysql_fetch_array($ack)){
+      echo "<a href=\"{$ack2[0]}\">{$ack2[1]}</a> ({$ack2[2]})<br />";
+    }
+    ?>
+    </div>
   </div>
 
   </div>
   
   <!-- Instructions -->
   <div id="dialog-message" title="Instructions">
-  		You will be asked to tag images in three different ways - using tags made up of a single word, using tags made up of more than one word, or using a comment.
+  		You'll be asked to tag images with tags made up of a single word, tags made up of more than one word, or a comment.
   		<br /><br />
-  	  <b>Examples of tags with a single word:</b> "<i>hello</i>" or "<i>maple</i>"<br /><br />
-  	  <b>Examples of tags with more than one word:</b> "<i>optimus prime</i>" or "<i>around_the_flask</i>"<br /><br />
-  	  <b>Example of a comment:</b> "<i>This is a comment and it can be as long or as short as I want.</i>"
+  	  <b>Tags with a single word:</b> "<i>hello</i>" or "<i>maple</i>"<br /><br />
+  	  <b>Tags with more than one word:</b> "<i>optimus prime</i>" or "<i>around_the_flask</i>"<br /><br />
+  	  <b>A comment:</b> "<i>This is a comment and it can be as long or as short as I want.</i>"
   </div>
   
-  <footer class="container_12">
+  <div id="dialog-message-swt" title="Single Word Tags">
+    Here are examples of tags made up of single words - "<i>hello</i>" or "<i>maple</i>" or "<i>John</i>". If you wanted to enter these tags, you would enter them like this:
+    <form><textarea disabled>hello
+maple
+John</textarea></form>
+  </div>
+  
+  <div id="dialog-message-mwt" title="Multi Word Tags">
+    Here are examples of tags made up of multiple words - "<i>hello world</i>" or "<i>optimus prime</i>" or "<i>around_the_flask</i>". If you wanted to enter these tags, you would enter them like this:
+    <form><textarea disabled>hello world
+optimus prime
+around_the_flask</textarea></form>
+  </div>
+  
+  <div id="dialog-message-com" title="Comments">
+    Here is an example of a comment - "<i>A comment can be as short or as long as you want.</i>". If you wanted to enter that comment, you would enter it like this:
+    <form><textarea disabled>A comment can be as short or as long as you want.</textarea></form>
+  </div>
+  
+  <footer class="container_12" style="display: none;">
     <?php
     echo "User ID is $user_id<br />";
     ?>

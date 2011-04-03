@@ -32,8 +32,13 @@ h4 {
   margin-top: 10px;
 }
 
+#content_image {
+  text-align: center;
+}
+
 #content_image img {
-  width: 620px;
+  max-width: 620px;
+  max-height: 500px;
 }
 
 #instructions {
@@ -132,6 +137,14 @@ ul.radiolist li{
 
 ul.radiolist li label{
   padding-left: 5px;
+}
+
+#dialog-message-swt, #dialog-message-mwt, #dialog-message-com {
+  font-size: smaller;
+}
+
+#dialog-message-swt textarea, #dialog-message-mwt textarea, #dialog-message-com textarea {
+  height: 150px;
 }
 
 /*
