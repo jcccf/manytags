@@ -147,6 +147,17 @@ ul.radiolist li label{
   height: 150px;
 }
 
+#dialogagain {
+  color: blue;
+  font-weight: bold;
+}
+
+#dialogagain:hover {
+  cursor: pointer;
+  color: navy;
+}
+
+
 /*
   jQuery UI Modifications
 */

@@ -205,7 +205,7 @@ $completed = ($r[0] == "1") ? "true" : "false";
 
   <div id="content_input" class="grid_4">
     <div>
-    <span id="instructions">Type <strong>single-word</strong> tags below. Separate your tags by line.</span>&nbsp;<a id="dialogagain" href="#">[?]</a>
+    <span id="instructions">Type <strong>single-word</strong> tags below. Separate your tags by line.</span>&nbsp;<span id="dialogagain">[?]</a>
     </div>
     <form>
     <textarea spellcheck="false" id="content_input_textarea" autofocus></textarea>  
