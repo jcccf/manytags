@@ -10,7 +10,7 @@ require_once("inc/core.php");
   <title>ManyTags</title>
   <link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.9.custom.css" />
   <link rel="stylesheet" href="css/default.css" />
-  <script src="js/jquery-1.5.min.js"></script>
+  <script src="js/jquery-1.5.2.min.js"></script>
   <script src="js/jquery-ui-1.8.9.custom.min.js"></script>
   <script>
   $(document).ready(function(){
@@ -26,11 +26,11 @@ require_once("inc/core.php");
 </head>
 
 <body>
-  <header class="container_12">
+  <div class="container_12">
     <div class="grid_12">
       <h1>ManyTags</h1>
     </div>
-  </header>
+  </div>
 
   <div id="content" class="container_12">
     <div class="grid_12">

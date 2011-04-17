@@ -2,6 +2,21 @@
 
 require_once("inc/core.php");
 
+function in_iarray($str, $a){
+foreach($a as $v){
+if(strcasecmp($str, $v)==0){return true;}
+}
+return false;
+}
+
+function array_iunique($a){
+$n = array();
+foreach($a as $k=>$v){
+if(!in_iarray($v, $n)){$n[$k]=$v;}
+}
+return $n;
+}
+
 // See if any existing data
 $datalist = array();
 $dat2list = array();
@@ -39,8 +54,8 @@ while($row = mysql_fetch_array($ord_q)){
   $a['image_id'] = $row[0];
   $a['url'] = $row[1];
   $a['type_id'] = $row[2];
-  $a['data'] = $datalist[$row[0]];
-  $a['image_data'] = $dat2list[$row[0]][$row[2]];
+  $a['data'] = isset($datalist[$row[0]]) ? $datalist[$row[0]] : array();
+  $a['image_data'] = isset($dat2list[$row[0]][$row[2]]) ? array_iunique($dat2list[$row[0]][$row[2]]) : array();
   $olist[] = $a;
 }
 

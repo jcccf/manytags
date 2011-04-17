@@ -99,7 +99,7 @@ ul.instructions li {
 }
 
 ul li{
-  display: inline;
+  display: inline-block;
 }
 
 span.tag_wrapper {

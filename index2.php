@@ -16,7 +16,7 @@ $completed = ($r[0] == "1") ? "true" : "false";
   <title>ManyTags Part 2</title>
   <link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.9.custom.css" />
   <link rel="stylesheet" href="css/default.css" />
-  <script src="js/jquery-1.5.min.js"></script>
+  <script src="js/jquery-1.5.2.min.js"></script>
   <script src="js/jquery-ui-1.8.9.custom.min.js"></script>
   <script src="js/json2.js"></script>
   <script src="js/history.adapter.jquery.js"></script>
@@ -105,6 +105,8 @@ $completed = ($r[0] == "1") ? "true" : "false";
       2: $("input[name=q2]:checked").val(), 
       3: $("input[name=q3]:checked").val() };
       
+    console.log(imageData[p].data);
+      
     $("input:radio").removeAttr("checked");
     
     // Post data to server
@@ -113,15 +115,15 @@ $completed = ($r[0] == "1") ? "true" : "false";
       function(data){
         $("#forward_button").removeAttr("disabled");
         $("#back_button").removeAttr("disabled");
-        
+        //alert(data);
         if(data.length > 0){
           alert("Errors Occurred!");
         }
-    },"json");
+    });
   }
   
   function restoreTagData(){
-    if(imageData[p].data != null){
+    if(imageData != null){
       $.each(imageData[p].data, function(k,v){
         $("input[name=q"+k+"][value='"+v+"']").click();
       });
@@ -130,13 +132,14 @@ $completed = ($r[0] == "1") ? "true" : "false";
 
   function updatePage(){
     restoreTagData();
-    $("#content_image_img").attr("src", imageData[p].url);
+    if(imageData != null)
+      $("#content_image_img").attr("src", imageData[p].url);
     $("#progressbar").progressbar({
 			value: (p+1) * 3.3
 		});
 		
 		$("#content_tags").removeClass().html("");
-		if(imageData[p].image_data != null){
+		if(imageData != null && imageData[p].image_data != null){
   		switch(imageData[p].type_id){
         case "1":
         case "2":        
@@ -155,7 +158,8 @@ $completed = ($r[0] == "1") ? "true" : "false";
           break;
       }
     }
-    $("#debug").html("Image ID is "+imageData[p].image_id+", Type_ID is "+imageData[p].type_id+", URL is "+imageData[p].url);
+    if(imageData != null)
+      $("#debug").html("Image ID is "+imageData[p].image_id+", Type_ID is "+imageData[p].type_id+", URL is "+imageData[p].url);
   }
   
   function endOfStudy(){
@@ -163,6 +167,7 @@ $completed = ($r[0] == "1") ? "true" : "false";
     $("#content_input").hide();
     $("#content_image").hide();
     $("#content_ratings").hide();
+    $("#navigation_bottom").hide();
     $("#theend_pre").show();
     $.post("set_options.php", {completed: 1}, function(){
       $("#theend_pre").hide();
@@ -239,12 +244,12 @@ $completed = ($r[0] == "1") ? "true" : "false";
   </div>
   <div id="theend" class="grid_12">
     Thank you for completing the first part of this study.<br />
-    Please visit <a href=\"\">this link</a> to continue with the survey.
+    Please visit <a href="https://cornell.qualtrics.com/SE/?SID=SV_9YOz9ySYdM7VdvS">this link</a> to continue with the survey.
   </div>
 
   </div>
   
-  <div class="container_12">
+  <div class="container_12" id="navigation_bottom">
     <div id="progressbar" class="grid_12 "></div>
     <div class="grid_12"><hr /></div>
     <form>
@@ -259,7 +264,7 @@ $completed = ($r[0] == "1") ? "true" : "false";
     </form>
   </div>
   
-  <footer class="container_12">
+  <footer class="container_12" style="display: none;">
     <div class="grid_12">
     <?php
     echo "User ID is {$_SESSION['user_id']}<br />";

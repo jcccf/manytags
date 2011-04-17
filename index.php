@@ -16,7 +16,7 @@ $completed = ($r[0] == "1") ? "true" : "false";
   <title>ManyTags</title>
   <link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.8.9.custom.css" />
   <link rel="stylesheet" href="css/default.css" />
-  <script src="js/jquery-1.5.min.js"></script>
+  <script src="js/jquery-1.5.2.min.js"></script>
   <script src="js/jquery-ui-1.8.9.custom.min.js"></script>
   <script src="js/json2.js"></script>
   <script src="js/history.adapter.jquery.js"></script>
@@ -142,17 +142,20 @@ $completed = ($r[0] == "1") ? "true" : "false";
   }
   
   function restoreTagData(){
-    $("#content_input_textarea").val(imageData[p].data);
+    if(imageData != null)
+      $("#content_input_textarea").val(imageData[p].data);
   }
   
   // Update page state to reflect any changes
   function updatePage(){
     if(completed) return false;
     restoreTagData();
-    $("#content_image_img").attr("src", imageData[p].url);
+    if(imageData != null)
+      $("#content_image_img").attr("src", imageData[p].url);
     $("#progressbar").progressbar({
 			value: (p+1) * 3.3
 		});
+		if (imageData != null)
     switch(imageData[p].type_id){
       case "1":
         $("#instructions").html("Type <strong>single-word</strong> tags below, with one tag on each line.");
@@ -167,7 +170,8 @@ $completed = ($r[0] == "1") ? "true" : "false";
         alert("An error occurred. Please let us know about how this occurred!");
         break;
     }
-		$("#debug").html("Image ID is "+imageData[p].image_id+", Type_ID is "+imageData[p].type_id+", URL is "+imageData[p].url);
+    if(imageData != null)
+		  $("#debug").html("Image ID is "+imageData[p].image_id+", Type_ID is "+imageData[p].type_id+", URL is "+imageData[p].url);
   }
   
   function endOfStudy(){
@@ -185,13 +189,13 @@ $completed = ($r[0] == "1") ? "true" : "false";
 </head>
 
 <body>
-  <header class="container_12">
+  <div class="container_12">
     <div class="grid_12">
       <h1>ManyTags</h1>
     </div>
     <div id="progressbar" class="grid_12 ">
     </div>
-  </header>
+  </div>
 
   <div id="divider" class="container_12">
     <hr />
@@ -229,7 +233,7 @@ $completed = ($r[0] == "1") ? "true" : "false";
   </div>
   <div id="theend" class="grid_12">
     Thank you for completing the first part of this study.<br />
-    Please visit <b><a href=\"https://cornell.qualtrics.com/SE/?SID=SV_6QiBUho6nQQfZAw\">this link</a></b> to continue with the survey.
+    Please visit <b><a href="https://cornell.qualtrics.com/SE/?SID=SV_6QiBUho6nQQfZAw">this link</a></b> to continue with the survey.
     
     <br /><br />
     <div style="font-size: x-small;">
